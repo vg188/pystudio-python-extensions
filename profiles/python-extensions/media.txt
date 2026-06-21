@@ -1,0 +1,13 @@
+# Media, audio, and video helpers used by common Python packages.
+python-lameenc
+ffmpeg
+libflac
+libogg
+libvorbis
+libopus
+libwebp
+libpng
+libjpeg-turbo
+taglib
+sox
+

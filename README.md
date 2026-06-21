@@ -1,3 +1,17 @@
+# PyStudio Python Extensions
+
+This repository builds optional Python/Pip extension package repositories for
+PyStudio (`com.vchangxiao.pystudio`).
+
+Use this repository for packages that are useful when `pip install` needs native
+commands, headers, or common Android-compatible libraries. The base Python/Pip
+runtime stays separate; these profiles are intended for optional in-app
+downloads.
+
+See `PYSTUDIO_PYTHON_EXTENSIONS.md` and `profiles/python-extensions/`.
+
+## Upstream Termux Packages
+
 # Termux packages
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/termux/termux-packages)

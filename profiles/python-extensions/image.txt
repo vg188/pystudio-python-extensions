@@ -1,0 +1,16 @@
+# Image processing and raster format dependencies.
+python-pillow
+python-skia-pathops
+imagemagick
+graphicsmagick
+libjpeg-turbo
+libpng
+libtiff
+openjpeg
+libwebp
+freetype
+fontconfig
+leptonica
+tesseract
+zbar
+

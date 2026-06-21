@@ -1,0 +1,16 @@
+# Data storage, interchange, compression, and runtime helpers.
+python-apsw
+python-msgpack
+python-brotli
+python-psutil
+libduckdb
+libarrow-cpp
+apache-orc
+libhdf5
+netcdf-c
+libsqlite
+libxml2
+libxslt
+libyaml
+zstd
+

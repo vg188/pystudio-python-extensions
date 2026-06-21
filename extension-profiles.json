@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "updatedAt": "2026-06-21",
+  "repository": "https://github.com/vg188/pystudio-python-extensions",
+  "artifactPrefix": "pystudio-python-extensions",
+  "architectures": ["aarch64", "arm", "i686", "x86_64"],
+  "profiles": [
+    {
+      "id": "build-core",
+      "group": "python-extension",
+      "title": "Pip Build Core",
+      "description": "Compilers, build tools, Rust, CMake, pkg-config, pybind11, and common native headers.",
+      "packageFile": "profiles/python-extensions/build-core.txt",
+      "installCommandName": "pystudio-install-python-build-core",
+      "verifyCommands": ["make --version", "cmake --version", "pkg-config --version"]
+    },
+    {
+      "id": "scientific",
+      "group": "python-extension",
+      "title": "Scientific Computing",
+      "description": "NumPy, SciPy, OpenBLAS, FFTW, SuiteSparse, HDF5, NetCDF, and related numeric libraries.",
+      "packageFile": "profiles/python-extensions/scientific.txt",
+      "installCommandName": "pystudio-install-python-scientific",
+      "verifyCommands": ["python3 -c \"import numpy, scipy; print(numpy.__version__)\""]
+    },
+    {
+      "id": "data",
+      "group": "python-extension",
+      "title": "Data Processing",
+      "description": "SQLite, DuckDB, Arrow, ORC, HDF5, NetCDF, MessagePack, Brotli, YAML, and Zstd.",
+      "packageFile": "profiles/python-extensions/data.txt",
+      "installCommandName": "pystudio-install-python-data",
+      "verifyCommands": ["python3 -c \"import msgpack, brotli; print('data ok')\""]
+    },
+    {
+      "id": "image",
+      "group": "python-extension",
+      "title": "Image Processing",
+      "description": "Pillow and raster libraries for JPEG, PNG, TIFF, WebP, ImageMagick, OCR, and barcode use cases.",
+      "packageFile": "profiles/python-extensions/image.txt",
+      "installCommandName": "pystudio-install-python-image",
+      "verifyCommands": ["python3 -c \"from PIL import Image; print(Image.__version__)\""]
+    },
+    {
+      "id": "visualize",
+      "group": "python-extension",
+      "title": "Visualization",
+      "description": "Matplotlib, contourpy, Cairo, Pango, Graphviz, and Gnuplot.",
+      "packageFile": "profiles/python-extensions/visualize.txt",
+      "installCommandName": "pystudio-install-python-visualize",
+      "verifyCommands": ["python3 -c \"import matplotlib; print(matplotlib.__version__)\""]
+    },
+    {
+      "id": "markup",
+      "group": "python-extension",
+      "title": "XML / HTML Parsing",
+      "description": "lxml, libxml2, libxslt, XML security, HTML cleanup/parsing, YAML, and tree-sitter parsers.",
+      "packageFile": "profiles/python-extensions/markup.txt",
+      "installCommandName": "pystudio-install-python-markup",
+      "verifyCommands": ["python3 -c \"import lxml; print(lxml.__version__)\""]
+    },
+    {
+      "id": "crypto-network",
+      "group": "python-extension",
+      "title": "Crypto / Network Protocols",
+      "description": "cryptography, bcrypt, PyCryptodomeX, gRPC, OpenSSL, libcurl, SSH, HTTP/2, and c-ares.",
+      "packageFile": "profiles/python-extensions/crypto-network.txt",
+      "installCommandName": "pystudio-install-python-crypto-network",
+      "verifyCommands": ["python3 -c \"import cryptography, grpc; print('crypto-network ok')\""]
+    },
+    {
+      "id": "media",
+      "group": "python-extension",
+      "title": "Media / Audio / Video",
+      "description": "ffmpeg, audio codecs, lame, FLAC, Ogg/Vorbis/Opus, TagLib, and SoX.",
+      "packageFile": "profiles/python-extensions/media.txt",
+      "installCommandName": "pystudio-install-python-media",
+      "verifyCommands": ["ffmpeg -version"]
+    },
+    {
+      "id": "ai-ml",
+      "group": "python-extension-heavy",
+      "title": "AI / ML Heavy Stack",
+      "description": "Torch, TorchVision, TorchAudio, TorchCodec, TFLite Runtime, ONNX Runtime, NumPy, and Pillow.",
+      "packageFile": "profiles/python-extensions/ai-ml.txt",
+      "installCommandName": "pystudio-install-python-ai-ml",
+      "verifyCommands": ["python3 -c \"import torch; print(torch.__version__)\""],
+      "heavy": true
+    }
+  ]
+}

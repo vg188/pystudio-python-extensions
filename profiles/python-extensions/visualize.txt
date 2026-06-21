@@ -1,0 +1,13 @@
+# Plotting and visualization packages.
+matplotlib
+python-contourpy
+pycairo
+pygobject
+libcairo
+pango
+freetype
+fontconfig
+libpng
+graphviz
+gnuplot
+

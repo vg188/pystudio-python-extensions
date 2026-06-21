@@ -1,25 +1,30 @@
-name: Build PyStudio Python Toolchain
+name: Build PyStudio Python Extensions
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - ".github/workflows/build-pystudio-python-toolchain.yml"
-      - "pystudio-package-set.txt"
-      - "PYSTUDIO_PYTHON_TOOLCHAIN.md"
-      - "scripts/**"
-      - "packages/**"
-      - "root-packages/**"
-      - "x11-packages/**"
   workflow_dispatch:
     inputs:
+      profile:
+        description: "Extension profile to build."
+        required: false
+        type: choice
+        default: build-core
+        options:
+          - build-core
+          - scientific
+          - data
+          - image
+          - visualize
+          - markup
+          - crypto-network
+          - media
+          - ai-ml
+          - all
       architectures:
         description: "Target architectures, comma-separated."
         required: false
         default: "aarch64,arm,i686,x86_64"
       packages:
-        description: "Runtime packages to build, space or comma separated."
+        description: "Optional package override, space or comma separated."
         required: false
         default: ""
       publish_release:
@@ -32,7 +37,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: pystudio-python-toolchain-${{ github.ref }}-${{ github.event_name }}
+  group: pystudio-python-extensions-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: false
 
 env:
@@ -40,11 +45,11 @@ env:
 
 jobs:
   resolve-inputs:
-    name: Resolve inputs
+    name: Resolve matrix
     runs-on: ubuntu-24.04
     outputs:
-      architectures_json: ${{ steps.resolve.outputs.architectures_json }}
-      packages: ${{ steps.resolve.outputs.packages }}
+      matrix_json: ${{ steps.resolve.outputs.matrix_json }}
+      package_override: ${{ steps.resolve.outputs.package_override }}
       publish_release: ${{ steps.resolve.outputs.publish_release }}
     steps:
       - name: Checkout repository
@@ -54,20 +59,23 @@ jobs:
         id: resolve
         shell: bash
         env:
+          INPUT_PROFILE: ${{ github.event.inputs.profile }}
           INPUT_ARCHITECTURES: ${{ github.event.inputs.architectures }}
           INPUT_PACKAGES: ${{ github.event.inputs.packages }}
           INPUT_PUBLISH_RELEASE: ${{ github.event.inputs.publish_release }}
         run: |
           set -euo pipefail
 
+          profile="${INPUT_PROFILE:-build-core}"
           architectures="${INPUT_ARCHITECTURES:-aarch64,arm,i686,x86_64}"
-          packages="${INPUT_PACKAGES:-}"
+          package_override="$(tr ',' ' ' <<< "${INPUT_PACKAGES:-}" | xargs || true)"
           publish_release="${INPUT_PUBLISH_RELEASE:-true}"
 
-          if [[ -z "$packages" ]]; then
-            packages="$(grep -v '^[[:space:]]*$' pystudio-package-set.txt | tr '\n' ' ' | xargs)"
+          if [[ "$profile" == "all" ]]; then
+            profiles="build-core scientific data image visualize markup crypto-network media ai-ml"
+          else
+            profiles="$profile"
           fi
-          packages="$(tr ',' ' ' <<< "$packages" | xargs)"
 
           arch_list="$(tr ',' ' ' <<< "$architectures")"
           for arch in $arch_list; do
@@ -76,25 +84,37 @@ jobs:
               *) echo "Unsupported architecture: $arch"; exit 1 ;;
             esac
           done
-          architectures_json="$(for arch in $arch_list; do printf '%s\n' "$arch"; done | jq -R . | jq -s -c .)"
+
+          matrix_json="$(
+            for p in $profiles; do
+              [[ -f "profiles/python-extensions/$p.txt" ]] || {
+                echo "Unknown extension profile: $p" >&2
+                exit 1
+              }
+              for a in $arch_list; do
+                jq -n --arg profile "$p" --arg arch "$a" \
+                  '{profile: $profile, arch: $arch}'
+              done
+            done | jq -s -c .
+          )"
 
           {
-            echo "architectures_json=$architectures_json"
-            echo "packages=$packages"
+            echo "matrix_json=$matrix_json"
+            echo "package_override=$package_override"
             echo "publish_release=$publish_release"
           } >> "$GITHUB_OUTPUT"
 
   build:
-    name: Build ${{ matrix.target_arch }}
+    name: Build ${{ matrix.profile }} / ${{ matrix.arch }}
     needs: resolve-inputs
     runs-on: ubuntu-24.04
     timeout-minutes: 360
     strategy:
       fail-fast: false
       matrix:
-        target_arch: ${{ fromJson(needs.resolve-inputs.outputs.architectures_json) }}
+        include: ${{ fromJson(needs.resolve-inputs.outputs.matrix_json) }}
     env:
-      PYSTUDIO_PACKAGES: ${{ needs.resolve-inputs.outputs.packages }}
+      PACKAGE_OVERRIDE: ${{ needs.resolve-inputs.outputs.package_override }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -113,27 +133,37 @@ jobs:
           set -euo pipefail
           ./scripts/free-space.sh
 
-      - name: Build PyStudio Python toolchain
+      - name: Build PyStudio Python extension packages
         shell: bash
         run: |
           set -euo pipefail
 
-          mapfile -t packages < <(tr ' ' '\n' <<< "$PYSTUDIO_PACKAGES" | sed '/^$/d')
+          if [[ -n "$PACKAGE_OVERRIDE" ]]; then
+            package_list="$PACKAGE_OVERRIDE"
+          else
+            package_list="$(sed 's/#.*$//' "profiles/python-extensions/${{ matrix.profile }}.txt" |
+              sed '/^[[:space:]]*$/d' |
+              tr '\n' ' ' |
+              xargs)"
+          fi
+
+          mapfile -t packages < <(tr ' ' '\n' <<< "$package_list" | sed '/^$/d')
           if [[ "${#packages[@]}" -eq 0 ]]; then
             echo "No packages requested."
             exit 1
           fi
 
-          rm -rf output repo-${{ matrix.target_arch }}
+          rm -rf output repo-${{ matrix.arch }}
           mkdir -p output
 
           echo "PyStudio package name: $PYSTUDIO_PACKAGE_NAME"
-          echo "Target architecture: ${{ matrix.target_arch }}"
+          echo "Extension profile: ${{ matrix.profile }}"
+          echo "Target architecture: ${{ matrix.arch }}"
           echo "Packages: ${packages[*]}"
 
           ./scripts/run-docker.sh -d ./build-package.sh \
             -C \
-            -a "${{ matrix.target_arch }}" \
+            -a "${{ matrix.arch }}" \
             "${packages[@]}"
 
       - name: Build apt repository artifact
@@ -144,9 +174,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y dpkg-dev xz-utils
 
-          arch="${{ matrix.target_arch }}"
+          profile="${{ matrix.profile }}"
+          arch="${{ matrix.arch }}"
           repo_dir="repo-$arch"
           binary_dir="$repo_dir/dists/stable/main/binary-$arch"
+          artifact_slug="pystudio-python-extensions-$profile"
 
           if ! find output -type f -name "*.deb" | grep -q .; then
             echo "No deb files were produced."
@@ -167,22 +199,22 @@ jobs:
 
           find "$repo_dir/pool/main" -type f -name "*.deb" -print0 |
             sort -z |
-            xargs -0 sha256sum > "SHA256SUMS-$arch.txt"
+            xargs -0 sha256sum > "SHA256SUMS-$profile-$arch.txt"
 
-          tar -czf "pystudio-python-toolchain-repo-$arch.tar.gz" -C "$repo_dir" .
-          tar -czf "pystudio-python-toolchain-debs-$arch.tar.gz" -C output .
+          tar -czf "$artifact_slug-repo-$arch.tar.gz" -C "$repo_dir" .
+          tar -czf "$artifact_slug-debs-$arch.tar.gz" -C output .
 
           find "$repo_dir" -type f -print | sort
-          cat "SHA256SUMS-$arch.txt"
+          cat "SHA256SUMS-$profile-$arch.txt"
 
-      - name: Upload Python toolchain artifact
+      - name: Upload Python extension artifact
         uses: actions/upload-artifact@v4
         with:
-          name: pystudio-python-toolchain-${{ matrix.target_arch }}-${{ github.run_number }}
+          name: pystudio-python-extensions-${{ matrix.profile }}-${{ matrix.arch }}-${{ github.run_number }}
           path: |
-            pystudio-python-toolchain-repo-${{ matrix.target_arch }}.tar.gz
-            pystudio-python-toolchain-debs-${{ matrix.target_arch }}.tar.gz
-            SHA256SUMS-${{ matrix.target_arch }}.txt
+            pystudio-python-extensions-${{ matrix.profile }}-repo-${{ matrix.arch }}.tar.gz
+            pystudio-python-extensions-${{ matrix.profile }}-debs-${{ matrix.arch }}.tar.gz
+            SHA256SUMS-${{ matrix.profile }}-${{ matrix.arch }}.txt
           if-no-files-found: error
 
   release:
@@ -193,7 +225,7 @@ jobs:
     if: ${{ needs.resolve-inputs.outputs.publish_release == 'true' }}
     runs-on: ubuntu-24.04
     steps:
-      - name: Download Python toolchain artifacts
+      - name: Download Python extension artifacts
         uses: actions/download-artifact@v4
         with:
           path: artifacts
@@ -207,8 +239,8 @@ jobs:
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: pystudio-python-toolchain-r${{ github.run_number }}
-          name: PyStudio Python toolchain r${{ github.run_number }}
+          tag_name: pystudio-python-extensions-r${{ github.run_number }}
+          name: PyStudio Python extensions r${{ github.run_number }}
           files: |
             artifacts/**/*.tar.gz
             artifacts/**/SHA256SUMS-*.txt

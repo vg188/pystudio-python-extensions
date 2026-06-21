@@ -1,0 +1,14 @@
+# XML, HTML, CSS-ish parsing, cleanup, and signing helpers.
+python-lxml
+libxml2
+libxslt
+xmlsec
+html-xml-utils
+tidy
+gumbo-parser
+lexbor
+libexpat
+libyaml
+tree-sitter-html
+tree-sitter-xml
+

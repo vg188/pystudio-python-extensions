@@ -1,0 +1,14 @@
+# Cryptography, TLS, SSH, HTTP/2, and network protocol dependencies.
+python-cryptography
+python-bcrypt
+python-pycryptodomex
+python-grpcio
+openssl
+libffi
+libsodium
+libssh2
+libcurl
+libnghttp2
+c-ares
+libprotobuf
+krb5
