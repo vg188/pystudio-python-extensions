@@ -60,7 +60,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          architectures="${INPUT_ARCHITECTURES:-aarch64}"
+          architectures="${INPUT_ARCHITECTURES:-aarch64,arm,i686,x86_64}"
           packages="${INPUT_PACKAGES:-}"
           publish_release="${INPUT_PUBLISH_RELEASE:-true}"
 
