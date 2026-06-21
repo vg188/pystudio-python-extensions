@@ -31,6 +31,8 @@ Run **Build PyStudio Python Extensions** manually.
 Inputs:
 
 - `profile`: one profile above or `all`.
+- `profile=standard` builds every normal profile except `ai-ml`.
+- `profile=all` also includes the heavy `ai-ml` profile.
 - `architectures`: default is `aarch64,arm,i686,x86_64`.
 - `packages`: optional package override for experiments.
 - `publish_release`: publish tarballs to a GitHub release.
