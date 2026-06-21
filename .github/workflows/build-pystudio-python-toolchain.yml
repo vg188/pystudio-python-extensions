@@ -162,7 +162,7 @@ jobs:
             cd "$repo_dir"
             dpkg-scanpackages --multiversion pool/main > "dists/stable/main/binary-$arch/Packages"
             gzip -9ck "dists/stable/main/binary-$arch/Packages" > "dists/stable/main/binary-$arch/Packages.gz"
-            xz -T0 -9ek "dists/stable/main/binary-$arch/Packages" > "dists/stable/main/binary-$arch/Packages.xz"
+            xz -T0 -9ck "dists/stable/main/binary-$arch/Packages" > "dists/stable/main/binary-$arch/Packages.xz"
           )
 
           find "$repo_dir/pool/main" -type f -name "*.deb" -print0 |
