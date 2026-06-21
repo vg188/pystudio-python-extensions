@@ -1,4 +1,4 @@
-# Compilers and build tools commonly needed by pip when no wheel is available.
+# Build tools and common headers needed by pip when no Android wheel exists.
 python-pip
 build-essential
 make

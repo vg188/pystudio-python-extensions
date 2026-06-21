@@ -1,0 +1,6 @@
+# Prebuilt Python packages for common data workloads.
+python-apsw
+python-msgpack
+python-brotli
+python-psutil
+

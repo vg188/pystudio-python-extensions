@@ -1,0 +1,11 @@
+# Native numeric/scientific libraries for pip-built packages.
+libopenblas
+suitesparse
+arpack-ng
+fftw
+gsl
+qhull
+libhdf5
+netcdf-c
+pybind11
+

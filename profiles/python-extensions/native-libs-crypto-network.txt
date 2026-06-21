@@ -1,0 +1,12 @@
+# Native crypto, TLS, SSH, HTTP/2, gRPC, and network libraries.
+openssl
+libffi
+libsodium
+libssh2
+libcurl
+libnghttp2
+c-ares
+libprotobuf
+libgrpc
+krb5
+

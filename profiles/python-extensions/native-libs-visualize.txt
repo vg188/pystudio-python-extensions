@@ -1,0 +1,9 @@
+# Native plotting and rendering libraries.
+libcairo
+pango
+freetype
+fontconfig
+libpng
+graphviz
+gnuplot
+

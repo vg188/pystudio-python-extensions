@@ -1,0 +1,6 @@
+# Prebuilt Python crypto and network protocol packages.
+python-cryptography
+python-bcrypt
+python-pycryptodomex
+python-grpcio
+

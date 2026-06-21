@@ -1,0 +1,4 @@
+# Prebuilt Python image packages.
+python-pillow
+python-skia-pathops
+

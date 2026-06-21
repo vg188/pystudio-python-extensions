@@ -7,19 +7,28 @@ on:
         description: "Extension profile to build."
         required: false
         type: choice
-        default: build-core
+        default: pip-build-core
         options:
-          - build-core
-          - scientific
-          - data
-          - image
-          - visualize
-          - markup
-          - crypto-network
-          - media
-          - ai-ml
+          - pip-build-core
+          - native-libs-scientific
+          - native-libs-data
+          - native-libs-image
+          - native-libs-visualize
+          - native-libs-markup
+          - native-libs-crypto-network
+          - native-libs-media
+          - prebuilt-python-scientific
+          - prebuilt-python-data
+          - prebuilt-python-image
+          - prebuilt-python-visualize
+          - prebuilt-python-markup
+          - prebuilt-python-crypto-network
+          - prebuilt-python-media
+          - prebuilt-python-ai-ml
           - standard
+          - prebuilt
           - all
+          - all-with-ai
       architectures:
         description: "Target architectures, comma-separated."
         required: false
@@ -67,18 +76,32 @@ jobs:
         run: |
           set -euo pipefail
 
-          profile="${INPUT_PROFILE:-build-core}"
+          profile="${INPUT_PROFILE:-pip-build-core}"
           architectures="${INPUT_ARCHITECTURES:-aarch64,arm,i686,x86_64}"
           package_override="$(tr ',' ' ' <<< "${INPUT_PACKAGES:-}" | xargs || true)"
           publish_release="${INPUT_PUBLISH_RELEASE:-true}"
 
-          if [[ "$profile" == "standard" ]]; then
-            profiles="build-core scientific data image visualize markup crypto-network media"
-          elif [[ "$profile" == "all" ]]; then
-            profiles="build-core scientific data image visualize markup crypto-network media ai-ml"
-          else
-            profiles="$profile"
-          fi
+          native_profiles="pip-build-core native-libs-scientific native-libs-data native-libs-image native-libs-visualize native-libs-markup native-libs-crypto-network native-libs-media"
+          prebuilt_profiles="prebuilt-python-scientific prebuilt-python-data prebuilt-python-image prebuilt-python-visualize prebuilt-python-markup prebuilt-python-crypto-network prebuilt-python-media"
+          heavy_prebuilt_profiles="prebuilt-python-ai-ml"
+
+          case "$profile" in
+            standard)
+              profiles="$native_profiles"
+              ;;
+            prebuilt)
+              profiles="$prebuilt_profiles"
+              ;;
+            all)
+              profiles="$native_profiles $prebuilt_profiles"
+              ;;
+            all-with-ai)
+              profiles="$native_profiles $prebuilt_profiles $heavy_prebuilt_profiles"
+              ;;
+            *)
+              profiles="$profile"
+              ;;
+          esac
 
           arch_list="$(tr ',' ' ' <<< "$architectures")"
           for arch in $arch_list; do

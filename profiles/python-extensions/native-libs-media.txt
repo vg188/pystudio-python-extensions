@@ -1,5 +1,4 @@
-# Media, audio, and video helpers used by common Python packages.
-python-lameenc
+# Native audio/video codec and media helper libraries.
 ffmpeg
 libflac
 libogg

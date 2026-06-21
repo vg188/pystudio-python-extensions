@@ -1,89 +1,233 @@
 {
-  "version": 1,
+  "version": 2,
   "updatedAt": "2026-06-21",
   "repository": "https://github.com/vg188/pystudio-python-extensions",
   "artifactPrefix": "pystudio-python-extensions",
   "architectures": ["aarch64", "arm", "i686", "x86_64"],
+  "strategy": {
+    "preferred": "Use pip-build-core plus native-libs-* profiles so users keep the normal pip install workflow.",
+    "fallback": "Use prebuilt-python-* profiles when Android builds are too slow, unreliable, or unsuitable for end users.",
+    "heavyFallback": "Keep prebuilt-python-ai-ml explicit because it is large and more likely to exceed CI or device limits."
+  },
+  "profileGroups": [
+    {
+      "id": "standard",
+      "title": "Pip Build Runtime",
+      "description": "Recommended default set: pip build tools plus native dependency libraries, without prebuilt Python modules.",
+      "profiles": [
+        "pip-build-core",
+        "native-libs-scientific",
+        "native-libs-data",
+        "native-libs-image",
+        "native-libs-visualize",
+        "native-libs-markup",
+        "native-libs-crypto-network",
+        "native-libs-media"
+      ]
+    },
+    {
+      "id": "prebuilt",
+      "title": "Prebuilt Python Fallback",
+      "description": "Fallback set of prebuilt Python modules for packages that are slow or fragile to compile on device.",
+      "profiles": [
+        "prebuilt-python-scientific",
+        "prebuilt-python-data",
+        "prebuilt-python-image",
+        "prebuilt-python-visualize",
+        "prebuilt-python-markup",
+        "prebuilt-python-crypto-network",
+        "prebuilt-python-media"
+      ]
+    },
+    {
+      "id": "all",
+      "title": "All Non-AI Extensions",
+      "description": "Standard native dependency packs plus non-AI prebuilt fallback packs.",
+      "profiles": [
+        "pip-build-core",
+        "native-libs-scientific",
+        "native-libs-data",
+        "native-libs-image",
+        "native-libs-visualize",
+        "native-libs-markup",
+        "native-libs-crypto-network",
+        "native-libs-media",
+        "prebuilt-python-scientific",
+        "prebuilt-python-data",
+        "prebuilt-python-image",
+        "prebuilt-python-visualize",
+        "prebuilt-python-markup",
+        "prebuilt-python-crypto-network",
+        "prebuilt-python-media"
+      ]
+    },
+    {
+      "id": "all-with-ai",
+      "title": "All Extensions Including AI",
+      "description": "Everything in all, plus the heavy AI/ML prebuilt fallback profile.",
+      "profiles": [
+        "pip-build-core",
+        "native-libs-scientific",
+        "native-libs-data",
+        "native-libs-image",
+        "native-libs-visualize",
+        "native-libs-markup",
+        "native-libs-crypto-network",
+        "native-libs-media",
+        "prebuilt-python-scientific",
+        "prebuilt-python-data",
+        "prebuilt-python-image",
+        "prebuilt-python-visualize",
+        "prebuilt-python-markup",
+        "prebuilt-python-crypto-network",
+        "prebuilt-python-media",
+        "prebuilt-python-ai-ml"
+      ]
+    }
+  ],
   "profiles": [
     {
-      "id": "build-core",
-      "group": "python-extension",
+      "id": "pip-build-core",
+      "group": "pip-toolchain",
       "title": "Pip Build Core",
-      "description": "Compilers, build tools, Rust, CMake, pkg-config, pybind11, and common native headers.",
-      "packageFile": "profiles/python-extensions/build-core.txt",
-      "installCommandName": "pystudio-install-python-build-core",
-      "verifyCommands": ["make --version", "cmake --version", "pkg-config --version"]
+      "description": "Pip, compilers, make, CMake, Ninja, pkg-config, Rust, pybind11, and common native headers.",
+      "packageFile": "profiles/python-extensions/pip-build-core.txt",
+      "installCommandName": "pystudio-install-pip-build-core",
+      "verifyCommands": ["python3 -m pip --version", "make --version", "cmake --version", "pkg-config --version"]
     },
     {
-      "id": "scientific",
-      "group": "python-extension",
-      "title": "Scientific Computing",
-      "description": "NumPy, SciPy, OpenBLAS, FFTW, SuiteSparse, HDF5, NetCDF, and related numeric libraries.",
-      "packageFile": "profiles/python-extensions/scientific.txt",
-      "installCommandName": "pystudio-install-python-scientific",
-      "verifyCommands": ["python3 -c \"import numpy, scipy; print(numpy.__version__)\""]
+      "id": "native-libs-scientific",
+      "group": "native-libs",
+      "title": "Scientific Native Libraries",
+      "description": "Native numeric libraries commonly needed by NumPy, SciPy, sparse solvers, HDF5, NetCDF, and scientific wheels.",
+      "packageFile": "profiles/python-extensions/native-libs-scientific.txt",
+      "installCommandName": "pystudio-install-native-libs-scientific",
+      "verifyCommands": ["python3 -m pip --version"]
     },
     {
-      "id": "data",
-      "group": "python-extension",
-      "title": "Data Processing",
-      "description": "SQLite, DuckDB, Arrow, ORC, HDF5, NetCDF, MessagePack, Brotli, YAML, and Zstd.",
-      "packageFile": "profiles/python-extensions/data.txt",
-      "installCommandName": "pystudio-install-python-data",
-      "verifyCommands": ["python3 -c \"import msgpack, brotli; print('data ok')\""]
+      "id": "native-libs-data",
+      "group": "native-libs",
+      "title": "Data Native Libraries",
+      "description": "Native data storage and interchange libraries for DuckDB, Arrow, ORC, HDF5, NetCDF, SQLite, YAML, XML, and Zstd.",
+      "packageFile": "profiles/python-extensions/native-libs-data.txt",
+      "installCommandName": "pystudio-install-native-libs-data",
+      "verifyCommands": ["sqlite3 --version"]
     },
     {
-      "id": "image",
-      "group": "python-extension",
-      "title": "Image Processing",
-      "description": "Pillow and raster libraries for JPEG, PNG, TIFF, WebP, ImageMagick, OCR, and barcode use cases.",
-      "packageFile": "profiles/python-extensions/image.txt",
-      "installCommandName": "pystudio-install-python-image",
-      "verifyCommands": ["python3 -c \"from PIL import Image; print(Image.__version__)\""]
+      "id": "native-libs-image",
+      "group": "native-libs",
+      "title": "Image Native Libraries",
+      "description": "Native image, OCR, barcode, JPEG, PNG, TIFF, WebP, ImageMagick, and GraphicsMagick dependencies.",
+      "packageFile": "profiles/python-extensions/native-libs-image.txt",
+      "installCommandName": "pystudio-install-native-libs-image",
+      "verifyCommands": ["convert --version"]
     },
     {
-      "id": "visualize",
-      "group": "python-extension",
-      "title": "Visualization",
-      "description": "Matplotlib, contourpy, Cairo, Pango, Graphviz, and Gnuplot.",
-      "packageFile": "profiles/python-extensions/visualize.txt",
-      "installCommandName": "pystudio-install-python-visualize",
-      "verifyCommands": ["python3 -c \"import matplotlib; print(matplotlib.__version__)\""]
+      "id": "native-libs-visualize",
+      "group": "native-libs",
+      "title": "Visualization Native Libraries",
+      "description": "Native Cairo, Pango, Graphviz, and Gnuplot libraries used by plotting and rendering packages.",
+      "packageFile": "profiles/python-extensions/native-libs-visualize.txt",
+      "installCommandName": "pystudio-install-native-libs-visualize",
+      "verifyCommands": ["dot -V", "gnuplot --version"]
     },
     {
-      "id": "markup",
-      "group": "python-extension",
-      "title": "XML / HTML Parsing",
-      "description": "lxml, libxml2, libxslt, XML security, HTML cleanup/parsing, YAML, and tree-sitter parsers.",
-      "packageFile": "profiles/python-extensions/markup.txt",
-      "installCommandName": "pystudio-install-python-markup",
-      "verifyCommands": ["python3 -c \"import lxml; print(lxml.__version__)\""]
+      "id": "native-libs-markup",
+      "group": "native-libs",
+      "title": "XML / HTML Native Libraries",
+      "description": "Native XML, HTML, YAML, tree-sitter, cleanup, and XML security dependencies.",
+      "packageFile": "profiles/python-extensions/native-libs-markup.txt",
+      "installCommandName": "pystudio-install-native-libs-markup",
+      "verifyCommands": ["xmllint --version"]
     },
     {
-      "id": "crypto-network",
-      "group": "python-extension",
-      "title": "Crypto / Network Protocols",
-      "description": "cryptography, bcrypt, PyCryptodomeX, gRPC, OpenSSL, libcurl, SSH, HTTP/2, and c-ares.",
-      "packageFile": "profiles/python-extensions/crypto-network.txt",
-      "installCommandName": "pystudio-install-python-crypto-network",
-      "verifyCommands": ["python3 -c \"import cryptography, grpc; print('crypto-network ok')\""]
+      "id": "native-libs-crypto-network",
+      "group": "native-libs",
+      "title": "Crypto / Network Native Libraries",
+      "description": "Native OpenSSL, libffi, libsodium, SSH, curl, HTTP/2, protobuf, gRPC, Kerberos, and c-ares dependencies.",
+      "packageFile": "profiles/python-extensions/native-libs-crypto-network.txt",
+      "installCommandName": "pystudio-install-native-libs-crypto-network",
+      "verifyCommands": ["openssl version", "curl --version"]
     },
     {
-      "id": "media",
-      "group": "python-extension",
-      "title": "Media / Audio / Video",
-      "description": "ffmpeg, audio codecs, lame, FLAC, Ogg/Vorbis/Opus, TagLib, and SoX.",
-      "packageFile": "profiles/python-extensions/media.txt",
-      "installCommandName": "pystudio-install-python-media",
+      "id": "native-libs-media",
+      "group": "native-libs",
+      "title": "Media Native Libraries",
+      "description": "Native audio/video libraries including ffmpeg, FLAC, Ogg, Vorbis, Opus, TagLib, SoX, and common image codecs.",
+      "packageFile": "profiles/python-extensions/native-libs-media.txt",
+      "installCommandName": "pystudio-install-native-libs-media",
       "verifyCommands": ["ffmpeg -version"]
     },
     {
-      "id": "ai-ml",
-      "group": "python-extension-heavy",
-      "title": "AI / ML Heavy Stack",
-      "description": "Torch, TorchVision, TorchAudio, TorchCodec, TFLite Runtime, ONNX Runtime, NumPy, and Pillow.",
-      "packageFile": "profiles/python-extensions/ai-ml.txt",
-      "installCommandName": "pystudio-install-python-ai-ml",
+      "id": "prebuilt-python-scientific",
+      "group": "prebuilt-python",
+      "title": "Prebuilt Scientific Python",
+      "description": "Prebuilt Python numeric packages for fallback installs when compiling scientific packages on device is not practical.",
+      "packageFile": "profiles/python-extensions/prebuilt-python-scientific.txt",
+      "installCommandName": "pystudio-install-prebuilt-python-scientific",
+      "verifyCommands": ["python3 -c \"import numpy, scipy; print(numpy.__version__)\""]
+    },
+    {
+      "id": "prebuilt-python-data",
+      "group": "prebuilt-python",
+      "title": "Prebuilt Data Python",
+      "description": "Prebuilt Python packages for data processing, serialization, storage, and compression fallback installs.",
+      "packageFile": "profiles/python-extensions/prebuilt-python-data.txt",
+      "installCommandName": "pystudio-install-prebuilt-python-data",
+      "verifyCommands": ["python3 -c \"import msgpack, brotli; print('data ok')\""]
+    },
+    {
+      "id": "prebuilt-python-image",
+      "group": "prebuilt-python",
+      "title": "Prebuilt Image Python",
+      "description": "Prebuilt Python image packages such as Pillow and related fallback modules.",
+      "packageFile": "profiles/python-extensions/prebuilt-python-image.txt",
+      "installCommandName": "pystudio-install-prebuilt-python-image",
+      "verifyCommands": ["python3 -c \"from PIL import Image; print(Image.__version__)\""]
+    },
+    {
+      "id": "prebuilt-python-visualize",
+      "group": "prebuilt-python",
+      "title": "Prebuilt Visualization Python",
+      "description": "Prebuilt Python plotting and visualization fallback modules.",
+      "packageFile": "profiles/python-extensions/prebuilt-python-visualize.txt",
+      "installCommandName": "pystudio-install-prebuilt-python-visualize",
+      "verifyCommands": ["python3 -c \"import matplotlib; print(matplotlib.__version__)\""]
+    },
+    {
+      "id": "prebuilt-python-markup",
+      "group": "prebuilt-python",
+      "title": "Prebuilt XML / HTML Python",
+      "description": "Prebuilt Python XML, HTML, and parsing fallback modules.",
+      "packageFile": "profiles/python-extensions/prebuilt-python-markup.txt",
+      "installCommandName": "pystudio-install-prebuilt-python-markup",
+      "verifyCommands": ["python3 -c \"import lxml; print(lxml.__version__)\""]
+    },
+    {
+      "id": "prebuilt-python-crypto-network",
+      "group": "prebuilt-python",
+      "title": "Prebuilt Crypto / Network Python",
+      "description": "Prebuilt Python cryptography, bcrypt, PyCryptodomeX, and gRPC fallback modules.",
+      "packageFile": "profiles/python-extensions/prebuilt-python-crypto-network.txt",
+      "installCommandName": "pystudio-install-prebuilt-python-crypto-network",
+      "verifyCommands": ["python3 -c \"import cryptography, grpc; print('crypto-network ok')\""]
+    },
+    {
+      "id": "prebuilt-python-media",
+      "group": "prebuilt-python",
+      "title": "Prebuilt Media Python",
+      "description": "Prebuilt Python media fallback modules that pair with audio/video native libraries.",
+      "packageFile": "profiles/python-extensions/prebuilt-python-media.txt",
+      "installCommandName": "pystudio-install-prebuilt-python-media",
+      "verifyCommands": ["ffmpeg -version"]
+    },
+    {
+      "id": "prebuilt-python-ai-ml",
+      "group": "prebuilt-python-heavy",
+      "title": "Prebuilt AI / ML Python",
+      "description": "Heavy prebuilt AI/ML fallback packages such as Torch, TorchVision, TorchAudio, TFLite Runtime, and ONNX Runtime.",
+      "packageFile": "profiles/python-extensions/prebuilt-python-ai-ml.txt",
+      "installCommandName": "pystudio-install-prebuilt-python-ai-ml",
       "verifyCommands": ["python3 -c \"import torch; print(torch.__version__)\""],
       "heavy": true
     }

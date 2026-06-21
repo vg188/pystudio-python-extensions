@@ -1,10 +1,7 @@
-# Heavy AI/ML packages. Build separately when needed.
+# Heavy prebuilt AI/ML Python packages. Build separately when needed.
 python-tflite-runtime
 python-torch
 python-torchvision
 python-torchaudio
 python-torchcodec
-python-numpy
-python-pillow
-libopenblas
 onnxruntime

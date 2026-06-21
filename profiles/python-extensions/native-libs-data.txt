@@ -1,0 +1,12 @@
+# Native data storage, interchange, compression, and database libraries.
+libduckdb
+libarrow-cpp
+apache-orc
+libhdf5
+netcdf-c
+libsqlite
+libyaml
+zstd
+libxml2
+libxslt
+

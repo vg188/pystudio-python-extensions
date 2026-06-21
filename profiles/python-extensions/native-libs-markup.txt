@@ -1,5 +1,4 @@
-# XML, HTML, CSS-ish parsing, cleanup, and signing helpers.
-python-lxml
+# Native XML, HTML, YAML, and parser libraries.
 libxml2
 libxslt
 xmlsec

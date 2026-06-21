@@ -1,0 +1,5 @@
+# Prebuilt Python packages for numeric/scientific workloads.
+python-numpy
+python-scipy
+python-llvmlite
+

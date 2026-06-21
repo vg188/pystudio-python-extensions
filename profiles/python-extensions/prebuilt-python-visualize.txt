@@ -1,0 +1,6 @@
+# Prebuilt Python visualization packages.
+matplotlib
+python-contourpy
+pycairo
+pygobject
+

@@ -1,6 +1,4 @@
-# Image processing and raster format dependencies.
-python-pillow
-python-skia-pathops
+# Native raster/image/OCR/barcode libraries for pip-built packages.
 imagemagick
 graphicsmagick
 libjpeg-turbo
