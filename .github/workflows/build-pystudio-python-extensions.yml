@@ -48,7 +48,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: pystudio-python-extensions-${{ github.ref }}-${{ github.event_name }}
+  group: pystudio-python-extensions-${{ github.ref }}-${{ github.event_name }}-${{ github.event.inputs.profile || 'pip-build-core' }}-${{ github.event.inputs.architectures || 'default' }}
   cancel-in-progress: false
 
 env:
