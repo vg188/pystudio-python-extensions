@@ -1,12 +1,10 @@
-# Native audio/video codec and media helper libraries.
-ffmpeg
+# Lightweight native audio/image codec libraries for pip-built packages.
 libflac
 libogg
 libvorbis
 libopus
+opusfile
 libwebp
 libpng
 libjpeg-turbo
 taglib
-sox
-

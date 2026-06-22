@@ -127,10 +127,10 @@
       "id": "native-libs-image",
       "group": "native-libs",
       "title": "Image Native Libraries",
-      "description": "Native JPEG, PNG, TIFF, WebP, OpenJPEG, FreeType, Fontconfig, GraphicsMagick, Leptonica, and Tesseract dependencies.",
+      "description": "Lightweight native JPEG, PNG, TIFF, WebP, OpenJPEG, FreeType, Fontconfig, and Leptonica dependencies for pip-built image packages.",
       "packageFile": "profiles/python-extensions/native-libs-image.txt",
       "installCommandName": "pystudio-install-native-libs-image",
-      "verifyCommands": ["gm version", "tesseract --version"]
+      "verifyCommands": ["fc-match --version"]
     },
     {
       "id": "native-libs-visualize",
@@ -163,10 +163,10 @@
       "id": "native-libs-media",
       "group": "native-libs",
       "title": "Media Native Libraries",
-      "description": "Native audio/video libraries including ffmpeg, FLAC, Ogg, Vorbis, Opus, TagLib, SoX, and common image codecs.",
+      "description": "Lightweight native FLAC, Ogg/Vorbis/Opus, TagLib, WebP, PNG, and JPEG codec dependencies for pip-built media packages.",
       "packageFile": "profiles/python-extensions/native-libs-media.txt",
       "installCommandName": "pystudio-install-native-libs-media",
-      "verifyCommands": ["ffmpeg -version"]
+      "verifyCommands": ["flac --version"]
     },
     {
       "id": "prebuilt-python-scientific",

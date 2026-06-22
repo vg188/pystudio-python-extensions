@@ -24,11 +24,11 @@ Profiles live in `profiles/python-extensions/*.txt`.
 | `pip-build-rust` | Heavy Rust and uv tooling for Rust-backed Python packages. Keep this explicit and out of default builds. |
 | `native-libs-scientific` | Native OpenBLAS, FFTW, SuiteSparse, HDF5, NetCDF, and numeric dependencies for pip builds. |
 | `native-libs-data` | Native DuckDB, Arrow, ORC, HDF5, SQLite, YAML, XML, and compression libraries. |
-| `native-libs-image` | Native JPEG, PNG, TIFF, WebP, OpenJPEG, FreeType, Fontconfig, GraphicsMagick, Leptonica, and Tesseract dependencies. |
+| `native-libs-image` | Lightweight native JPEG, PNG, TIFF, WebP, OpenJPEG, FreeType, Fontconfig, and Leptonica dependencies. |
 | `native-libs-visualize` | Lightweight native plotting dependencies for pip-built visualization packages. |
 | `native-libs-markup` | Native XML, HTML, YAML, XML security, cleanup, and tree-sitter parser dependencies. |
 | `native-libs-crypto-network` | Native OpenSSL, libffi, libsodium, SSH, curl, HTTP/2, protobuf, gRPC, Kerberos, and c-ares dependencies. |
-| `native-libs-media` | Native ffmpeg, FLAC, Ogg/Vorbis/Opus, TagLib, SoX, and media codec dependencies. |
+| `native-libs-media` | Lightweight native FLAC, Ogg/Vorbis/Opus, TagLib, WebP, PNG, and JPEG codec dependencies. |
 | `prebuilt-python-scientific` | Prebuilt NumPy/SciPy-style fallback packages. |
 | `prebuilt-python-data` | Prebuilt data processing, serialization, storage, and compression fallback packages. |
 | `prebuilt-python-image` | Prebuilt image processing fallback packages such as Pillow. |
