@@ -25,7 +25,7 @@ Profiles live in `profiles/python-extensions/*.txt`.
 | `native-libs-scientific` | Native OpenBLAS, FFTW, SuiteSparse, HDF5, NetCDF, and numeric dependencies for pip builds. |
 | `native-libs-data` | Native DuckDB, Arrow, ORC, HDF5, SQLite, YAML, XML, and compression libraries. |
 | `native-libs-image` | Native JPEG, PNG, TIFF, WebP, OpenJPEG, FreeType, Fontconfig, GraphicsMagick, Leptonica, and Tesseract dependencies. |
-| `native-libs-visualize` | Native Cairo, Pango, Graphviz, and Gnuplot dependencies. |
+| `native-libs-visualize` | Lightweight native plotting dependencies for pip-built visualization packages. |
 | `native-libs-markup` | Native XML, HTML, YAML, XML security, cleanup, and tree-sitter parser dependencies. |
 | `native-libs-crypto-network` | Native OpenSSL, libffi, libsodium, SSH, curl, HTTP/2, protobuf, gRPC, Kerberos, and c-ares dependencies. |
 | `native-libs-media` | Native ffmpeg, FLAC, Ogg/Vorbis/Opus, TagLib, SoX, and media codec dependencies. |

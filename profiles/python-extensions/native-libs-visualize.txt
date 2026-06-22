@@ -1,9 +1,5 @@
-# Native plotting and rendering libraries.
-libcairo
-pango
+# Lightweight native plotting libraries for pip-built packages.
 freetype
 fontconfig
 libpng
-graphviz
-gnuplot
-
+qhull

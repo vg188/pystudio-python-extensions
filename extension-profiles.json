@@ -136,10 +136,10 @@
       "id": "native-libs-visualize",
       "group": "native-libs",
       "title": "Visualization Native Libraries",
-      "description": "Native Cairo, Pango, Graphviz, and Gnuplot libraries used by plotting and rendering packages.",
+      "description": "Lightweight native plotting dependencies for pip-built visualization packages, avoiding Android SDK/Gradle dependency chains.",
       "packageFile": "profiles/python-extensions/native-libs-visualize.txt",
       "installCommandName": "pystudio-install-native-libs-visualize",
-      "verifyCommands": ["dot -V", "gnuplot --version"]
+      "verifyCommands": ["fc-match --version"]
     },
     {
       "id": "native-libs-markup",
