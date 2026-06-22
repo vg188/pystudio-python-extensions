@@ -7,13 +7,13 @@
   "strategy": {
     "preferred": "Use pip-build-core plus native-libs-* profiles so users keep the normal pip install workflow.",
     "fallback": "Use prebuilt-python-* profiles when Android builds are too slow, unreliable, or unsuitable for end users.",
-    "heavyFallback": "Keep prebuilt-python-ai-ml explicit because it is large and more likely to exceed CI or device limits."
+    "heavyFallback": "Keep pip-build-rust and prebuilt-python-ai-ml explicit because they are large and more likely to exceed CI or device limits."
   },
   "profileGroups": [
     {
       "id": "standard",
       "title": "Pip Build Runtime",
-      "description": "Recommended default set: pip build tools plus native dependency libraries, without prebuilt Python modules.",
+      "description": "Recommended default set: pip build tools plus native dependency libraries, without heavy Rust tooling or prebuilt Python modules.",
       "profiles": [
         "pip-build-core",
         "native-libs-scientific",
@@ -90,10 +90,20 @@
       "id": "pip-build-core",
       "group": "pip-toolchain",
       "title": "Pip Build Core",
-      "description": "Pip, compilers, make, CMake, Ninja, pkg-config, Rust, pybind11, and common native headers.",
+      "description": "Pip, compilers, make, CMake, Ninja, pkg-config, pybind11, and common native headers.",
       "packageFile": "profiles/python-extensions/pip-build-core.txt",
       "installCommandName": "pystudio-install-pip-build-core",
       "verifyCommands": ["python3 -m pip --version", "make --version", "cmake --version", "pkg-config --version"]
+    },
+    {
+      "id": "pip-build-rust",
+      "group": "pip-toolchain-heavy",
+      "title": "Rust Pip Build Tools",
+      "description": "Heavy Rust-based build tools for Python packages that use Rust extensions or uv.",
+      "packageFile": "profiles/python-extensions/pip-build-rust.txt",
+      "installCommandName": "pystudio-install-pip-build-rust",
+      "verifyCommands": ["rustc --version", "uv --version"],
+      "heavy": true
     },
     {
       "id": "native-libs-scientific",
@@ -117,10 +127,10 @@
       "id": "native-libs-image",
       "group": "native-libs",
       "title": "Image Native Libraries",
-      "description": "Native image, OCR, barcode, JPEG, PNG, TIFF, WebP, ImageMagick, and GraphicsMagick dependencies.",
+      "description": "Native JPEG, PNG, TIFF, WebP, OpenJPEG, FreeType, Fontconfig, GraphicsMagick, Leptonica, and Tesseract dependencies.",
       "packageFile": "profiles/python-extensions/native-libs-image.txt",
       "installCommandName": "pystudio-install-native-libs-image",
-      "verifyCommands": ["convert --version"]
+      "verifyCommands": ["gm version", "tesseract --version"]
     },
     {
       "id": "native-libs-visualize",

@@ -1,5 +1,4 @@
 # Native raster/image/OCR/barcode libraries for pip-built packages.
-imagemagick
 graphicsmagick
 libjpeg-turbo
 libpng
@@ -10,5 +9,3 @@ freetype
 fontconfig
 leptonica
 tesseract
-zbar
-

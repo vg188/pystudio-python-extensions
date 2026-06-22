@@ -8,7 +8,8 @@ packages are provided in two tracks:
 
 1. `pip-build-core` plus `native-libs-*` profiles provide compilers, build
    tools, headers, and native libraries so Android pip builds have a better
-   chance to succeed.
+   chance to succeed. Heavy Rust-based build helpers live in `pip-build-rust`
+   and are kept out of the default profile.
 2. `prebuilt-python-*` profiles remain available as fallback packages for
    common modules that are too slow, too large, or too fragile to compile on
    device.
@@ -19,10 +20,11 @@ Profiles live in `profiles/python-extensions/*.txt`.
 
 | Profile | Purpose |
 | --- | --- |
-| `pip-build-core` | Pip, compilers, make, CMake, Ninja, pkg-config, Rust, pybind11, and common headers. |
+| `pip-build-core` | Pip, compilers, make, CMake, Ninja, pkg-config, pybind11, and common headers. |
+| `pip-build-rust` | Heavy Rust and uv tooling for Rust-backed Python packages. Keep this explicit and out of default builds. |
 | `native-libs-scientific` | Native OpenBLAS, FFTW, SuiteSparse, HDF5, NetCDF, and numeric dependencies for pip builds. |
 | `native-libs-data` | Native DuckDB, Arrow, ORC, HDF5, SQLite, YAML, XML, and compression libraries. |
-| `native-libs-image` | Native JPEG, PNG, TIFF, WebP, ImageMagick, GraphicsMagick, OCR, and barcode dependencies. |
+| `native-libs-image` | Native JPEG, PNG, TIFF, WebP, OpenJPEG, FreeType, Fontconfig, GraphicsMagick, Leptonica, and Tesseract dependencies. |
 | `native-libs-visualize` | Native Cairo, Pango, Graphviz, and Gnuplot dependencies. |
 | `native-libs-markup` | Native XML, HTML, YAML, XML security, cleanup, and tree-sitter parser dependencies. |
 | `native-libs-crypto-network` | Native OpenSSL, libffi, libsodium, SSH, curl, HTTP/2, protobuf, gRPC, Kerberos, and c-ares dependencies. |
@@ -44,7 +46,8 @@ Inputs:
 
 - `profile`: one profile above or one grouped profile.
 - `profile=standard` builds the recommended pip path:
-  `pip-build-core` plus all `native-libs-*` profiles.
+  `pip-build-core` plus all `native-libs-*` profiles. It does not include
+  `pip-build-rust`.
 - `profile=prebuilt` builds non-AI `prebuilt-python-*` fallback profiles.
 - `profile=all` builds `standard` plus non-AI prebuilt fallback profiles.
 - `profile=all-with-ai` also includes `prebuilt-python-ai-ml`.

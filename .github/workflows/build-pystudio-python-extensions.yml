@@ -10,6 +10,7 @@ on:
         default: pip-build-core
         options:
           - pip-build-core
+          - pip-build-rust
           - native-libs-scientific
           - native-libs-data
           - native-libs-image

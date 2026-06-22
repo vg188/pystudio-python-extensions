@@ -8,10 +8,8 @@ pkg-config
 rust
 pybind11
 python-cmake
-uv
 libffi
 openssl
 zlib
 libxml2
 libxslt
-

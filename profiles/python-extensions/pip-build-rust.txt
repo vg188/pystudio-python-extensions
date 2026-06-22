@@ -1,0 +1,3 @@
+# Heavy Rust-based pip build helpers for packages such as maturin-based wheels.
+rust
+uv
