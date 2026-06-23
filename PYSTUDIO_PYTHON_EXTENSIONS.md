@@ -51,6 +51,8 @@ Inputs:
 - `profile=prebuilt` builds non-AI `prebuilt-python-*` fallback profiles.
 - `profile=all` builds `standard` plus non-AI prebuilt fallback profiles.
 - `profile=all-with-ai` also includes `prebuilt-python-ai-ml`.
+- `profile=heavy-debug` builds only the high-risk heavy profiles:
+  `pip-build-rust` and `prebuilt-python-ai-ml`.
 - `architectures`: default is `aarch64,arm,i686,x86_64`.
 - `packages`: optional package override for experiments.
 - `publish_release`: publish tarballs to a GitHub release.

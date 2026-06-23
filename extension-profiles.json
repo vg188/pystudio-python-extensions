@@ -83,6 +83,15 @@
         "prebuilt-python-media",
         "prebuilt-python-ai-ml"
       ]
+    },
+    {
+      "id": "heavy-debug",
+      "title": "Heavy Build Debug",
+      "description": "High-risk heavy profiles kept separate from standard builds so failures do not block known-good extension packages.",
+      "profiles": [
+        "pip-build-rust",
+        "prebuilt-python-ai-ml"
+      ]
     }
   ],
   "profiles": [
