@@ -30,6 +30,8 @@ on:
           - prebuilt
           - all
           - all-with-ai
+          - rust-debug
+          - ai-ml-debug
           - heavy-debug
       architectures:
         description: "Target architectures, comma-separated."
@@ -100,6 +102,12 @@ jobs:
               ;;
             all-with-ai)
               profiles="$native_profiles $prebuilt_profiles $heavy_prebuilt_profiles"
+              ;;
+            rust-debug)
+              profiles="pip-build-rust"
+              ;;
+            ai-ml-debug)
+              profiles="prebuilt-python-ai-ml"
               ;;
             heavy-debug)
               profiles="$heavy_debug_profiles"

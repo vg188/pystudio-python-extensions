@@ -167,6 +167,26 @@ termux_step_configure() {
 		ln -fsv "$(command -v clang)" "${WASI_SDK_PATH}/bin/${clang}"
 	done
 
+	local host_llvm_config="${TERMUX_HOST_LLVM_BASE_DIR}/bin/llvm-config"
+	if [[ ! -x "${host_llvm_config}" ]]; then
+		local candidate
+		for candidate in \
+			"${TERMUX_TOPDIR:-${HOME}/.termux-build}/wasi-libc/host-build/install/bin/llvm-config" \
+			/usr/lib/llvm-*/bin/llvm-config \
+			/usr/bin/llvm-config; do
+			if [[ -x "${candidate}" ]]; then
+				TERMUX_HOST_LLVM_BASE_DIR="$(dirname "$(dirname "$(realpath "${candidate}")")")"
+				host_llvm_config="${TERMUX_HOST_LLVM_BASE_DIR}/bin/llvm-config"
+				echo "INFO: Using detected host llvm-config: ${host_llvm_config}"
+				break
+			fi
+		done
+	fi
+
+	if [[ ! -x "${host_llvm_config}" ]]; then
+		termux_error_exit "Host llvm-config not found at ${host_llvm_config}"
+	fi
+
 	if [[ "${TERMUX_ON_DEVICE_BUILD}" == "true" ]]; then
 		local dir="${TERMUX_STANDALONE_TOOLCHAIN}/toolchains/llvm/prebuilt/linux-x86_64/bin"
 		mkdir -p "${dir}"

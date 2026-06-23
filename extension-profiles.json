@@ -92,6 +92,22 @@
         "pip-build-rust",
         "prebuilt-python-ai-ml"
       ]
+    },
+    {
+      "id": "rust-debug",
+      "title": "Rust Build Debug",
+      "description": "Rust-only heavy debug profile for packages that need Rust extensions or uv.",
+      "profiles": [
+        "pip-build-rust"
+      ]
+    },
+    {
+      "id": "ai-ml-debug",
+      "title": "AI / ML Build Debug",
+      "description": "AI/ML-only heavy debug profile for large prebuilt Python fallback packages.",
+      "profiles": [
+        "prebuilt-python-ai-ml"
+      ]
     }
   ],
   "profiles": [
