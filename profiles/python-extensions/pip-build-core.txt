@@ -5,7 +5,6 @@ make
 cmake
 ninja
 pkg-config
-rust
 pybind11
 python-cmake
 libffi
